@@ -52,10 +52,10 @@ mv ./composer.phar /var/www/html/composer;
 echo "------------------------------------";
 echo " --- Install Laravel --- "
 echo "------------------------------------";
-cmd=$(grep -ci "~/var/www/html/" /root/.bashrc);
+cmd=$(grep -ci "/var/www/html/" /root/.bashrc);
 if [ "$cmd" -eq "0" ]; then
     #path not was setted
-	echo "export PATH=\"~/var/www/html/vendor/bin:\$PATH\"" >> /root/.bashrc
+	echo "export PATH=\"/var/www/html/vendor/bin:\$PATH\"" >> /root/.bashrc
 	source /root/.bashrc
 fi
 cd /var/www/html/
