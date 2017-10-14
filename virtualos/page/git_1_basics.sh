@@ -1,7 +1,7 @@
 {
 "text":
 [
-["sudo apt-get install git-all","install git on Debian based distro with this command"],
+["","install git on Debian based distro with this command"],
 ["git init","create a new local repository"],
 ["git config --global user.name \"pista\"","set your username what your use on github.com too, in this case it is <b>pista</b>"],
 ["git config --global user.email \"pista@gmail.com\"","set your email what your use on github.com too, in this case it is <b>pista@gmail.com</b>"],
