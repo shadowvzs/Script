@@ -1,0 +1,47 @@
+AddDefaultCharset utf-8
+<IfModule mod_rewrite.c>
+	RewriteEngine on
+    	RewriteRule ^bejelentkezes/?$ index.php?page=login
+    	RewriteRule ^login/?$ index.php?page=login
+
+    	RewriteRule ^regisztracio/?$ index.php?page=signup
+    	RewriteRule ^signup/?$ index.php?page=signup
+
+    	RewriteRule ^kijelentkezes/?$ index.php?c=User&a=logout
+    	RewriteRule ^logout/?$ index.php?c=User&a=logout
+
+    	RewriteRule ^naptar/?$ index.php?page=events
+    	RewriteRule ^events/?$ index.php?page=events
+
+    	RewriteRule ^videok/?$ index.php?page=videos
+    	RewriteRule ^videos/?$ index.php?page=videos
+
+    	RewriteRule ^galeria/?$ index.php?page=albums
+    	RewriteRule ^albums/?$ index.php?page=albums
+
+    	RewriteRule ^cikkek/?$ index.php?page=articles
+    	RewriteRule ^articles/?$ index.php?page=articles
+
+    	RewriteRule ^uzenofal/?$ index.php?page=walls
+    	RewriteRule ^walls/?$ index.php?page=walls
+
+    	RewriteRule ^letoltes/?$ index.php?page=downloads
+    	RewriteRule ^downloads/?$ index.php?page=downloads
+
+    	RewriteRule ^biblia/?$ index.php?c=Redirect&a=bible
+    	RewriteRule ^bible/?$ index.php?c=Redirect&a=bible
+
+    	RewriteRule ^posta/?$ index.php?page=messages
+    	RewriteRule ^messages/?$ index.php?page=messages
+
+    	RewriteRule ^beallitasok/?$ index.php?page=settings
+    	RewriteRule ^settings/?$ index.php?page=settings
+
+    	RewriteRule ^cpanel/show/(\d+)/?$ dashboard.php?page=article&id=$1
+	Redirect 301 ^biblia$ http://shadowvzs.uw.hu/biblia/index.php
+	RewriteBase /
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule .* /public/error/404.html [L]
+	RewriteRule ^$ index.php
+</IfModule>
