@@ -28,6 +28,7 @@ Every object was created inside **App** iife function
 ## ajax
 <details>
 <summary> show/hide </summary>
+	
 * **input param**: 
 	* url - string
 	* method - string
