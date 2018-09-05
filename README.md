@@ -65,6 +65,84 @@ Every object was created inside **App** iife function
 * **responsability**:
 	* send to user an animated flash message at top-right corner
 </details>
+
+# Router
+<details>
+<summary> show/hide </summary>
+* **output property**: 
+	* url() - return object (properties: base_path, base_url, url_array, query_string, query_array)
+	* redirect(newUrl, title=null, obj=null) - redirect the page (call setPage from Controller)
+	* setFullUrl(newUrl) - change url without other action
+	* setUrl(urlAddon) - change url based on urlAddon (modelComponent use this option)
+	* init() - delayed redirect()
+
+* **note**:	
+	* Appache .htaccess redirect everything to index.php so the url will be handled by Router object what got a contructor function and later will be created the instance 
+
+* **role**:
+	* manage history part (push state)
+	* manage back button event
+
+
+## Router in action
+	
+* You must define the available routes in Router constructor function like:
+```
+		routes = [
+			/*
+				which got * it is optional, not required!
+				url(0): prefix*/model/action*/:param*
+				prefix(1) - optional (use false if you don't use)
+				auth(2)	  - required role level (null/false=public page)
+				prefix(3)  - validation for params (ex: NUMBER/SLUG)
+			*/
+			//            0               1    2    3    
+			['/admin/user/edit/:id/', 'admin', 3, ['NUMBER']],
+			['/gallery/album/:slug/:index', false, null, ['SLUG','NUMBER']],
+		];
+```
+* If current url structure match with anything (**validateRoute**) from routes array then call setPage method in Controller
+	* if pages.model_action exist then build the page with model & view
+		* pages_model_action got information about page name, if required mode data, which component use that page etc
+	* else redirect to error page ( with id 404)
+* Router have a global click event what check if current element/or his parent element have href attribute, if check if the link was one from following link type:
+    * Redirect (internal) then push into history and replace url, call the setPage method
+		* **/home**
+    * Component then send data to popUpRender method in View object
+		* **href="*" data-action="component/youtubeViewer/show/1"**
+    * Toggle - toggle an element by id
+		* **href="*" data-action="toggle/audioPlayer"**
+    * SelectAll - toggle an element
+		* **href="*" data-action="selectAll/"**
+    * Submit collect input data and send to server (ex. login/registration)
+		* **href="*" data-action="submit/login"**
+    * else - normal link, jump to another site/server/domain
+		* **href="https://google.com"**
+</details>
+
+# Middleware
+<details>
+<summary> show/hide </summary>
+* **output property**: 
+	* add (label, callback=null) - assign callback under this object where key is the label
+	* run(label, data) - call assigned callback and pass data into those callbacks
+	* remove(label) - remove assigned callback property from this object
+
+* **role**:
+	* bridge between controller and router (injected to both constructor)
+
+## Middleware in action
+	
+* assign function from controller
+```
+	middleware.add('redirect', setPage);
+```
+* run assigned function 
+```
+	middleware.run("redirect", data );
+```
+</details>
+
 --------------------------------------
 
 
@@ -159,82 +237,4 @@ Every object was created inside **App** iife function
 	* examples: 
 		* imageViewer set content and define url for modalComponent
 		* imageManager set content for right-click contextMenu
-</details>
-
-
-# Router
-<details>
-<summary> show/hide </summary>
-* **output property**: 
-	* url() - return object (properties: base_path, base_url, url_array, query_string, query_array)
-	* redirect(newUrl, title=null, obj=null) - redirect the page (call setPage from Controller)
-	* setFullUrl(newUrl) - change url without other action
-	* setUrl(urlAddon) - change url based on urlAddon (modelComponent use this option)
-	* init() - delayed redirect()
-
-* **note**:	
-	* Appache .htaccess redirect everything to index.php so the url will be handled by Router object what got a contructor function and later will be created the instance 
-
-* **role**:
-	* manage history part (push state)
-	* manage back button event
-
-
-## Router in action
-	
-* You must define the available routes in Router constructor function like:
-```
-		routes = [
-			/*
-				which got * it is optional, not required!
-				url(0): prefix*/model/action*/:param*
-				prefix(1) - optional (use false if you don't use)
-				auth(2)	  - required role level (null/false=public page)
-				prefix(3)  - validation for params (ex: NUMBER/SLUG)
-			*/
-			//            0               1    2    3    
-			['/admin/user/edit/:id/', 'admin', 3, ['NUMBER']],
-			['/gallery/album/:slug/:index', false, null, ['SLUG','NUMBER']],
-		];
-```
-* If current url structure match with anything (**validateRoute**) from routes array then call setPage method in Controller
-	* if pages.model_action exist then build the page with model & view
-		* pages_model_action got information about page name, if required mode data, which component use that page etc
-	* else redirect to error page ( with id 404)
-* Router have a global click event what check if current element/or his parent element have href attribute, if check if the link was one from following link type:
-    * Redirect (internal) then push into history and replace url, call the setPage method
-		* **/home**
-    * Component then send data to popUpRender method in View object
-		* **href="*" data-action="component/youtubeViewer/show/1"**
-    * Toggle - toggle an element by id
-		* **href="*" data-action="toggle/audioPlayer"**
-    * SelectAll - toggle an element
-		* **href="*" data-action="selectAll/"**
-    * Submit collect input data and send to server (ex. login/registration)
-		* **href="*" data-action="submit/login"**
-    * else - normal link, jump to another site/server/domain
-		* **href="https://google.com"**
-</details>
-
-# Middleware
-<details>
-<summary> show/hide </summary>
-* **output property**: 
-	* add (label, callback=null) - assign callback under this object where key is the label
-	* run(label, data) - call assigned callback and pass data into those callbacks
-	* remove(label) - remove assigned callback property from this object
-
-* **role**:
-	* bridge between controller and router (injected to both constructor)
-
-## Middleware in action
-	
-* assign function from controller
-```
-	middleware.add('redirect', setPage);
-```
-* run assigned function 
-```
-	middleware.run("redirect", data );
-```
 </details>
