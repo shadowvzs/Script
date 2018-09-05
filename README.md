@@ -25,7 +25,7 @@ Every object was created inside **App** iife function
 
 --------------------------------------
 
-## ajax
+# ajax
 <details>
 <summary> show/hide </summary>
 	
@@ -50,9 +50,10 @@ Every object was created inside **App** iife function
 	* if user rank changed (ex. login/logout) then call visibility render function from view
 </details>
 
-## notify
+# notify
 <details>
 <summary> show/hide </summary>
+	
 * **use**:
 	* message - string
 	* type - string (default: 'error', 'success', 'normal', 'warning')
