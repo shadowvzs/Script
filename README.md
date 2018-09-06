@@ -1,7 +1,6 @@
 # Script
 LAMP stack, composer, git, laravel installer script for debian/ubuntu
 
-
 ## Isolation
 Every object was created inside **App** iife function
 
@@ -145,6 +144,76 @@ Every object was created inside **App** iife function
 
 --------------------------------------
 
+# Pages
+<details>
+<summary> show/hide </summary>
+
+* **input/output param**:
+	* not exist because it object literal
+
+* **role**:
+	* contain the page and core (view related) infos, main categories:
+		* global - common data:
+			* components (permanent components)
+			* cache (maybe will be removed)
+		* current - common data for current page:
+			* routerData (current controller, action, param, data)
+			* dom (content dom cache)
+			* bone (content dom string content)
+			* title
+			* data (maybe will be removed, used for image cache)
+			* component (page related component)
+			* componentData (if component must store data - see **components** )
+		* controller_action (page related data, ex: article_index - see **router** )
+			* title (page title, sevaral page overwrite this, ex. gallery/article)
+			* render (if missing then it is same than model: false)
+				* model 
+					* boolean: if we need data or no, file name is the controller name, method name will be action
+					* string: if data coming from outside, like example youtube playlist coming from youtube api
+			* template (string key which, which template function we use in view for create that page)
+			* component (object - it is setup data for components - see **components** )
+			* example: 
+```
+				user_index: {
+					title: "Felhasználók",
+					render: {
+						model: true,
+					},
+					component: {
+						userManager: {
+							name: 'userManager',
+							condition: {
+								role: 3
+							},
+							table: '.user .index main table',
+							storeData: true,
+							datasource: {
+								edit: MODEL_PATH+'User.php?action=admin_edit',
+								delete: MODEL_PATH+'User.php?action=delete_user',
+							},
+							constructor: UserManagerComponent
+						}
+					},
+					template: 'usersPage',
+				},
+```			
+## Description
+* pages object verified by Controller 
+	* model render missing or false: then will call automatically View.build();
+	* model render is string: then call the model.getCustomData(render.model, param);
+	* model render is true: then call the model.getPageData(controller, action, param);
+		* in this case backend send in response which View render function(s) must used for page
+		* example, this call View.build(data):
+```
+		class Article extends Model {
+			public function index($data=null) {
+				// code code code
+				return $this->sendResponse([$articles, 0], 'build');
+			}
+		}
+```			
+* pages object used in View object in build method ( see **view** )
+</details>
 
 # Components
 <details>
