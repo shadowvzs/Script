@@ -215,8 +215,9 @@ Every object was created inside **App** iife function
 			* NUMBER, PHONE, ALPHA, ALPHA_NUM, STR_AND_NUM, LOW_UP_NUM, SLUG, NAME, NAME_HUN, ADDRESS_HUN, STRING, EMAIL, IP
 			* example:
 ```
-			'STR_AND_NUM': /^([0-9]+[a-zA-Z]+|[a-zA-Z]+[0-9]+|[a-zA-Z]+[0-9]+[a-zA-Z]+)$/,
-```				
+			'STR_AND_NUM': /^([0-9]+[a-zA-Z]+|[a-zA-Z]+[0-9]+|[a-zA-Z]+[0-9]+[a-zA-Z]+)$/
+```		
+
 		* INTERNAL_ERROR_URL: url for error 500 - internal error page 
 		* NOT_FOUND_URL: url for error 404 - not found page 
 		* NO_ACCESS_URL: url for error 403 - forbidden page
