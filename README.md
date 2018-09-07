@@ -66,7 +66,7 @@ Every object was created inside **App** iife function
 	* send to user an animated flash message at top-right corner
 </details>
 
-# Router
+# router
 <details>
 <summary> show/hide </summary>
 * **output property**: 
@@ -169,7 +169,7 @@ Every object was created inside **App** iife function
 
 
 
-# Middleware
+# middleware
 <details>
 <summary> show/hide </summary>
 * **output property**: 
