@@ -1,6 +1,7 @@
 # Script
 LAMP stack, composer, git, laravel installer script for debian/ubuntu
 
+
 ## Isolation
 Every object was created inside **App** iife function
 
@@ -119,6 +120,55 @@ Every object was created inside **App** iife function
 		* **href="https://google.com"**
 </details>
 
+# model
+<details>
+<summary> show/hide </summary>
+	
+* **input param**: 
+	* nothing at moment but could be injected view or router
+
+* **output property**: 
+	* getPageData(controller, action, param) 
+		* those data from url, like /user/edit/2
+	* submitForm(formId, url, extraDataObject, successHandler)
+		* formId - id on form element, which contain the form data fields
+		* url - string
+		* extraDataObject - object[optional] what we want insert into form datas
+		* successHandler - function[optional] we can assign handler function if needed else backend must send which handle needed for processing the returned data
+	* getCustomData(apiKey, param)
+		* apiKey - string key for for Api object inside of model object
+		* param what we send to api
+
+* **role**:
+	* this is the data source with ajax, send/ask data from backend
+	* depend on function what we use, could be:
+		* sending data to api and handle the request with inbuilt api functions
+		* sending form:
+			* gather every input, select, textarea inside of form element
+			* validate data if data got rules and give error if something wrong:
+				* **everything what you validate here, must validate in backend too!!**
+				* attributes what needed for validation:
+					* **id**: must have same prefix than form name
+						* ex. form is loginForm, then email field id is login_email
+					* **name**: same like id, must have same prefix
+						* when we send data then form prefix cutted and param became the remaining string:
+						* ex. **name="login_email"** when u send became **email=" *input value* "**
+					* **title**: well, this is only optional but could be usefull
+						* when validation fail and we have title then we send this message to user and not validator error message
+					* **validators**: used for validate the inputs with predefined rules:
+						* **data-rule="EMAIL,5,50"** - email validator
+							* EMAIL: regex pattern name, see **regex patterns**
+							* 5: minimum length
+							* 50: maximum length
+						* **data-same="signup_password"** - element id - compare this element value with another element value
+				* complete example: 		
+```
+				<input id="login_email" name="login_email" type="text" placeholder="Email cím" title="Kérem adjon meg egy valós email címet" data-rule="EMAIL,5,50">
+```					
+</details>
+
+
+
 # Middleware
 <details>
 <summary> show/hide </summary>
@@ -143,6 +193,39 @@ Every object was created inside **App** iife function
 </details>
 
 --------------------------------------
+
+# Constants and Regex pattern
+<details>
+<summary> show/hide </summary>
+* note: maybe this will be changed by time
+* constants: 
+	* path:
+		* BASE_PROTOCOL: http or https
+		* BASE_HOSTNAME: hostname
+		* BASE_ROOT: base root
+		* MODEL_PATH: path for backend model
+		* IMAGE_PATH: image folder path 
+		* GALLERY_PATH: image gallery folder path 
+		* THUMBNAIL_PATH: image gallery thumbnail folder path 
+		* MENU_ICON_PATH: menu icon folder path 
+		* USER_STATUS: array (Inactive,Active,Banned,Deleted)
+		* USER_RANK: array(Guest,Member,Moderator,Admin,Owner)
+		* VALIDATOR: regex pattern for **router** and **model** (form validator)
+			* NUMBER, PHONE, ALPHA, ALPHA_NUM, STR_AND_NUM, LOW_UP_NUM, SLUG, NAME, NAME_HUN, ADDRESS_HUN, STRING, EMAIL, IP
+			* example:
+```
+			'STR_AND_NUM': /^([0-9]+[a-zA-Z]+|[a-zA-Z]+[0-9]+|[a-zA-Z]+[0-9]+[a-zA-Z]+)$/,
+```				
+		* INTERNAL_ERROR_URL: url for error 500 - internal error page 
+		* NOT_FOUND_URL: url for error 404 - not found page 
+		* NO_ACCESS_URL: url for error 403 - forbidden page
+		* ERROR_MSG{id:message}: error message based on error id 
+		* MOUSE_BUTTON: for make difference for normal left click
+		* SERVER_TIME_ZONE: GMT+x sec, example 7200 = GMT+3
+		* CLIENT_TIME_ZONE: image folder path
+		* ALLOWED_STATUS_DIFFERENCE: limit in sec which used to define user is online or offline
+		* debug: function(data) - write data to console log
+</details>
 
 # Pages
 <details>
