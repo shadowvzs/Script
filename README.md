@@ -197,6 +197,7 @@ Every object was created inside **App** iife function
 # Constants and Regex pattern
 <details>
 <summary> show/hide </summary>
+
 * note: maybe this will be changed by time
 * constants: 
 	* path:
