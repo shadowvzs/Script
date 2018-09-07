@@ -201,6 +201,7 @@ Every object was created inside **App** iife function
 * note: maybe this will be changed by time
 * constants: 
 	* path:
+		* debug: function(data) - write data to console log
 		* BASE_PROTOCOL: http or https
 		* BASE_HOSTNAME: hostname
 		* BASE_ROOT: base root
@@ -211,13 +212,6 @@ Every object was created inside **App** iife function
 		* MENU_ICON_PATH: menu icon folder path 
 		* USER_STATUS: array (Inactive,Active,Banned,Deleted)
 		* USER_RANK: array(Guest,Member,Moderator,Admin,Owner)
-		* VALIDATOR: regex pattern for **router** and **model** (form validator)
-			* NUMBER, PHONE, ALPHA, ALPHA_NUM, STR_AND_NUM, LOW_UP_NUM, SLUG, NAME, NAME_HUN, ADDRESS_HUN, STRING, EMAIL, IP
-			* example:
-```
-			'STR_AND_NUM': /^([0-9]+[a-zA-Z]+|[a-zA-Z]+[0-9]+|[a-zA-Z]+[0-9]+[a-zA-Z]+)$/
-```		
-
 		* INTERNAL_ERROR_URL: url for error 500 - internal error page 
 		* NOT_FOUND_URL: url for error 404 - not found page 
 		* NO_ACCESS_URL: url for error 403 - forbidden page
@@ -226,7 +220,12 @@ Every object was created inside **App** iife function
 		* SERVER_TIME_ZONE: GMT+x sec, example 7200 = GMT+3
 		* CLIENT_TIME_ZONE: image folder path
 		* ALLOWED_STATUS_DIFFERENCE: limit in sec which used to define user is online or offline
-		* debug: function(data) - write data to console log
+		* VALIDATOR: regex pattern for **router** and **model** (form validator)
+			* NUMBER, PHONE, ALPHA, ALPHA_NUM, STR_AND_NUM, LOW_UP_NUM, SLUG, NAME, NAME_HUN, ADDRESS_HUN, STRING, EMAIL, IP
+			* example:
+```
+			'STR_AND_NUM': /^([0-9]+[a-zA-Z]+|[a-zA-Z]+[0-9]+|[a-zA-Z]+[0-9]+[a-zA-Z]+)$/
+```		
 </details>
 
 # Pages
