@@ -2,10 +2,34 @@
 LAMP stack, composer, git, laravel installer script for debian/ubuntu
 
 
+
+
 ## Isolation
 Every object was created inside **App** iife function
 
 
+--------------------------------------
+
+# File structure:
+
+* css/*.css
+* font/*.ttf
+* img/
+	* gallery
+		* mini/*.jpg|png
+		* *.jpg	
+	* icons - would be removed
+		* menu - would be removed
+		* social - would be removed
+	* static/*.jpg|png
+* js/App.js
+* model/*.php
+* .htaccess
+* index.php
+
+--------------------------------------
+
+# Client Side
 
 ## Main objects:
 *except components & pages, every object will be constructed only once*
@@ -23,6 +47,15 @@ Every object was created inside **App** iife function
 * **pages** - object literal about page behaviours 
 * **components** - *each component got his own constructor*
 
+--------------------------------------
+
+# Server Side
+* **PHP** - the heart in backend
+	* Model - every other class extends this one
+	* Child Models - which table related classes like User
+* **.htaccess** - for url rewrite / redirection to index.php
+
+--------------------------------------
 --------------------------------------
 
 # ajax
@@ -120,6 +153,25 @@ Every object was created inside **App** iife function
 		* **href="https://google.com"**
 </details>
 
+# controller
+<details>
+<summary> show/hide </summary>
+* **input property**: 
+	* middleware object
+
+* **role & useage**:
+	* bridge between router and view/model (with middleware)
+	* router through middleware can call & pass routedata to setPage function in controller
+		* this terminate the old page
+		* call model or view for build page depend on **render** in **pages** object
+			* if render.model: true - get data from backend and call view.build()
+				* we call: **model.getPageData(controller, action, param)**
+			* if render.model: string - get api data then it call view.build()
+				* we call: **model.getCustomData(render.model, param)**
+			* if render.model not exist - static pages
+				* we call: **view.build()**
+</details>
+
 # model
 <details>
 <summary> show/hide </summary>
@@ -167,7 +219,77 @@ Every object was created inside **App** iife function
 ```					
 </details>
 
+# view
+<details>
+<summary> show/hide </summary>
+	
+* **input param**: 
+	* nothing at moment but could be injected model or router
 
+* **output property**: 
+	* getContent(key, data) 
+		* key is string key
+		* data is object
+		* return template string from **tFunc** (template function) object, (where method name is key, param is data)
+	* render(key, data)
+		* key is string
+		* data is object
+		* execute function from **rFunc** object (where method name is key, param is data)
+	* multicall(data)
+		* data is object array and contain which render functions need to be called
+	* build(data)
+		* will call the private **build** function which also accept same param (see internal functions)
+	* visibility()
+		* call the internal **refreshDOMVisibility()** function
+	* terminate()
+		* call the internal **terminate()** function
+		* param what we send to api
+
+		
+* **role**:
+	* render the page content with object what we get from backend with model+ajax
+		* also at build phase add/remove page depend/global components
+		* change the page title
+	* render elements which got rank condition (ex. login/logout button)
+	* store shared templates in **tFunc** object
+		* also can serve this templates to components via **getContent** function
+	* create the initial menus
+
+
+* **internal function roles**:
+	* rFunc: 
+		* a group of stored the functions which could be called from render function (and declared from backend too)
+		* ex.: multicall, redirect
+	*tFunc: 
+		* most of template function accept atleast 1 object param
+		* here we store template function with return the template string 
+		* we can share that templates and return with **getContent** function
+	* refreshDOMVisibility: 
+		* check and change the role depend dom elements
+		* example logout button if it have **.logged_only** class
+```
+			['.guest_only', Auth.role === 0],
+			['.logged_only', Auth.role > 0],
+			['.member_only', Auth.role > 1],
+			['.moderator_only', Auth.role > 2],
+			['.admin_only', Auth.role > 3],
+```
+	* refreshGlobalComponents:
+		* recheck the global components condition if fulfilled or need add/remove
+	* build: 
+		* it use data object param and pages.current.routeData object for create page content
+			* with controller and action from routedata we get which template we need to use from **tFunc**
+			* change page title
+			* in special case like login/registration its add class to body for remove page scrollbar for those full screen pages
+			* we cache the content dom, string bone, data, title in **pages.current**
+		* add page depend components if condition is fulfilled
+			* it will be stored into pages.current.component[componentName]
+			* data (if needed - see **components**) will be stored into pages.current.componentData[componentName]
+	* terminate:
+		* remove page content
+			* in special case like login/registration its remove class from body ( reenable the page scrollbar)
+		* remove page depend components	
+</details>
 
 # middleware
 <details>
@@ -239,7 +361,6 @@ Every object was created inside **App** iife function
 	* contain the page and core (view related) infos, main categories:
 		* global - common data:
 			* components (permanent components)
-			* cache (maybe will be removed)
 		* current - common data for current page:
 			* routerData (current controller, action, param, data)
 			* dom (content dom cache)
@@ -390,4 +511,79 @@ Every object was created inside **App** iife function
 	* examples: 
 		* imageViewer set content and define url for modalComponent
 		* imageManager set content for right-click contextMenu
+</details>
+
+--------------------------------------
+--------------------------------------
+
+# Model
+<details>
+<summary> show/hide </summary>
+
+* **Inits**:
+	* Constants
+		* DEBUG
+		* LOG
+	* Rest
+		* session start
+		* json header
+* **Class**
+	* properties - *all static*
+		* $files - used for file upload
+		* $request  
+			* data:
+				* param: used for store the data from GET/POST request and will be validated
+				* action: which we will call
+				* method: POST or GET
+		* $method - which action we will use, same than $request['data']['action']
+		* $auth - auth data 
+			* userId - 0 or user_id
+			* name - Guest or the user full name
+			* role - 0 or user rank
+			* hash - '' or user session hash (hash the key for logged user session data)
+			* domain - random string which changed at every request ($_SESSION['domain']) 
+		* $DATABASE - connection data
+			* HOST
+			* USER
+			* PASSWORD
+			* DATABASE
+		* $PATTERN - regex patterns for validations
+			* EMAIL
+			* NAME_HUN
+			* ADDRESS_HUN
+			* NAME
+			* INTEGER
+			* SLUG
+			* ALPHA_NUM
+			* STR_AND_NUM
+			* LOWER_UPPER_NUM
+			* STRING - it is special and function was used for this
+	* methods - *normal and static*	
+		* deleteFile($path) - static
+			* delete file
+		* accessVerification()
+			* check if user have access for the wanted method
+		* requestValidation()
+			* validate $request['data']['param'] content with rules from $INPUT_RULE
+			
+* **Constructor**: 
+	* fill the static properties
+	* call **domainVerification()**
+	* call **setAuthKey()**
+	* call **accessVerification()**
+	* request validation 
+		* if fail will redirect to **refuseData** and send error
+	* check if requested method exist
+		* if no then redirect to **refuseData** and send error
+	
+* **special**: 
+	* ----
+
+* **role**:
+	* validate domain/auth session
+	* validate permission for requested method
+	* validate the sent *params*
+	* wrap the most used MySQL queries (save, update, count, delete, readId etc)
+	* execute MySQL queries
+	
 </details>
