@@ -3,6 +3,11 @@ LAMP stack, composer, git, laravel installer script for debian/ubuntu
 
 
 
+# Script
+LAMP stack, composer, git, laravel installer script for debian/ubuntu
+
+
+
 
 ## Isolation
 Every object was created inside **App** iife function
@@ -561,11 +566,38 @@ Every object was created inside **App** iife function
 	* methods - *normal and static*	
 		* deleteFile($path) - static
 			* delete file
-		* accessVerification()
+		* accessVerification() - normal
 			* check if user have access for the wanted method
-		* requestValidation()
+		* requestValidation() - normal
 			* validate $request['data']['param'] content with rules from $INPUT_RULE
-			
+		* setAuthKey() - normal
+			* set $auth array if we can find with hash or set default values for guest
+		* domainVerification() - normal
+			* check if domain found in session
+				* if yes and mismatch with domain from last request:
+					* call setAuthKey()
+					* call refuseData($errorMsg)
+			* generate new domain and save in session
+		* getParam($key1, $key2, $dafaultValue) - normal
+			* if any from 2 key is empty return the defaultValue
+			* else call **validateString ($key1, $key2)**
+			* key1 is param key what data got in $request['data']['param']
+			* key2 is key for $PATTERN regex validation
+		* getData($key1, $dafaultValue) - normal
+			* similiar like the geParam only this return data from $request['data']
+			* allways validated like alpha numeric string (ex. controller name, action name etc)
+		* validateString($key1, $key2) - normal
+			* key1 is param key what data got in $request['data']['param']
+			* key2 is key for $PATTERN regex validation
+			* return boolean ( used preg_match on htmlspcialchars and trimmed data) except for string where special function used
+		* refuseData($errorMessage, $renderFunc) - static
+			* errorMessage - if we want send message from backend to client side
+			* rederFunc - (optional) which render function we want use
+		* sendResponse($modelData, $renderFunc, $notifyMsg) - normal
+			* modelData - data what we want send to client
+			* rederFunc - (optional) which render function we want use
+			* notifyMsg - (optional) if we want send message from backend to client side
+
 * **Constructor**: 
 	* fill the static properties
 	* call **domainVerification()**
@@ -587,3 +619,4 @@ Every object was created inside **App** iife function
 	* execute MySQL queries
 	
 </details>
+
